@@ -1,6 +1,7 @@
 const Board = () => {
     return (
-        <div>
+        <div className="container">
+            <h2 className="text-8xl">test</h2>
             Here is the board
         </div>
     )
