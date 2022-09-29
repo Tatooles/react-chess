@@ -11,13 +11,15 @@ const Board = () => {
   }
 
   return (
-    <div className="container">
+    <div>
       <h2 className="text-8xl">test number 1</h2>
       Here is the board
       <button className='border-2' onClick={makeMove}>init chess</button>
-      {chess.board().map((piece, i) => (
-        <div key={i}>{JSON.stringify(piece)}</div>
-      ))}
+      <div id="board" className="grid grid-cols-8">
+        {chess.board().flat().map((piece, i) => (
+          <div key={i}>{JSON.stringify(piece)}</div>
+        ))}
+      </div>
     </div>
   )
 }
