@@ -16,15 +16,12 @@ const Board = () => {
       <h2 className="text-8xl">test number 1</h2>
       Here is the board
       <button className='border-2' onClick={makeMove}>init chess</button>
-      <div id="board" className="grid grid-cols-8 bg-black gap-1 border-4 border-black">
+      <div id="board" className="grid grid-cols-8 bg-black">
         {chess.board().flat().map((piece, i) => (
-          // TODO: Make this into a piece class
           // Piece onClick will call a function with further logic to determine if it's the firist piece clicked
           // Maybe store the clicked piece in state
           // Later on that first click will highlight the possible moves for that piece
           <Square key={i} i={i} piece={piece}></Square>
-          // <div key={i}>{JSON.stringify(piece)}</div>
-          // Maybe have the piece and square in here so they're not the same but occupy the same place
         ))}
       </div>
     </div>
