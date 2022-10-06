@@ -19,7 +19,7 @@ const Piece = ({ piece }: any) => {
     }
   }
   return (
-    <div dangerouslySetInnerHTML={{ __html: getPiece(piece.type) }} className={piece.color === 'w' ? 'text-white' : 'text-black'}></div>
+    <div className={`text-sm  ${piece.color === 'w' ? 'text-white' : 'text-black'}`}>i</div>
   )
 }
 
