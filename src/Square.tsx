@@ -13,7 +13,7 @@ const Square = ({ i, piece }: SquareProps) => {
     return (x + y) % 2 === 0;
   }
   return (
-    <div className={`text-center align-middle justify-items-center ${isBlack(i) ? "bg-[#ebebd0]" : "bg-[#779556]"}`}>
+    <div className={`w-[44px] h-[44px] md:w-[63px] md:h-[63px] text-center align-middle justify-items-center ${isBlack(i) ? "bg-[#ebebd0]" : "bg-[#779556]"}`}>
       {piece
         ? <Piece piece={piece} />
         : <span>&nbsp;</span>
