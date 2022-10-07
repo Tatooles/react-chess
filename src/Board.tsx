@@ -12,6 +12,9 @@ const Board = () => {
     const move = newBoard.move({ from: from, to: to });
     if (!move) {
       console.log('invalid move');
+    } else {
+      // Now deslect piece
+      setClickedPiece({ i: -1, square: '' });
     }
     // TODO: Now need some validation to check for finished game or stalemate
     setBoard(newBoard);
@@ -22,16 +25,14 @@ const Board = () => {
   }
 
   const squareClicked = (i: number, piece?: any) => {
-    // This means we have already selected a piece, so try to make a move
-    if (clickedPiece.i != -1) {
-      makeMove(clickedPiece.square, indexToSquare(i));
-      // Now deslect piece
-      setClickedPiece({ i: -1, square: '' });
-    }
-    // TODO: Don't want to select a pice on take
+    // TODO: Track turn and prevent selecting piece on off turn
     if (piece) {
       setClickedPiece({ i: i, square: piece.square });
       // TODO: Also select possible moves for this piece
+    }
+    // This means we have already selected a piece, so try to make a move
+    if (clickedPiece.i != -1) {
+      makeMove(clickedPiece.square, indexToSquare(i));
     }
   }
 
