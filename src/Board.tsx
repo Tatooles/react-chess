@@ -1,11 +1,11 @@
 import { Chess } from 'chess.js'
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 import Square from './Square';
 
 const Board = () => {
   const [board, setBoard] = useState(new Chess());
   const [clickedPiece, setClickedPiece] = useState({ i: -1, square: '' });
-  const [activeSquares, setActiveSquares] = useState([]);
+  const [activeSquares, setActiveSquares] = useState([-1]);
   const [whiteMove, setWhiteMove] = useState(true);
   const [winner, setWinner] = useState('');
 
@@ -18,6 +18,7 @@ const Board = () => {
     } else {
       // Successful move
       // Now deslect piece and change current turn
+      setActiveSquares([-1]);
       setClickedPiece({ i: -1, square: '' });
       setWhiteMove(!whiteMove);
     }
@@ -46,6 +47,17 @@ const Board = () => {
     return `${String.fromCharCode(i % 8 + 97)}${8 - Math.floor(i / 8)}`;
   }
 
+  const squareToIndex = (square: any): number => {
+    // If not a pawn, moves have the piece character at the beginning
+    if (square.length > 2) {
+      square = square.substring(1);
+    }
+    const x = square.charCodeAt(0) - 97;
+    const y = 8 - parseInt(square.charAt(1));
+
+    return y * 8 + x;
+  }
+
   /**
    * Determine whether it's this piece's turn
    * @param piece 
@@ -59,10 +71,16 @@ const Board = () => {
   }
 
   const squareClicked = (i: number, piece?: any) => {
-    // TODO: Track turn and prevent selecting piece on off turn
+    // Select the current piece, and highlight it and all other possible moves
     if (piece && pieceIsCurrentTurn(piece)) {
       setClickedPiece({ i: i, square: piece.square });
-      // TODO: Also select possible moves for this piece
+      const moves = board.moves({ square: piece.square });
+      let selected = [];
+      selected.push(i);
+      moves.forEach(move => {
+        selected.push(squareToIndex(move));
+      });
+      setActiveSquares(selected);
     }
     // This means we have already selected a piece, so try to make a move
     if (clickedPiece.i != -1) {
@@ -83,7 +101,7 @@ const Board = () => {
           // Piece onClick will call a function with further logic to determine if it's the firist piece clicked
           // Maybe store the clicked piece in state
           // Later on that first click will highlight the possible moves for that piece
-          <Square squareClicked={squareClicked} active={i == clickedPiece.i ? true : false} key={i} i={i} piece={piece}></Square>
+          <Square squareClicked={squareClicked} active={activeSquares.includes(i) ? true : false} key={i} i={i} piece={piece}></Square>
         ))}
       </div>
       {winner && <div className='mx-auto'>Game over {winner} has won</div>}

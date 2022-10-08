@@ -4,7 +4,7 @@ import Board from './Board'
 
 function App() {
   return (
-    <div className='mx-auto flex-col container h-screen justify-center bg-slate-600'>
+    <div className='mx-auto flex-col container h-screen bg-slate-600'>
       <Board />
     </div>
   )
