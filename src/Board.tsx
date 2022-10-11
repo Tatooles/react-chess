@@ -2,7 +2,7 @@ import { Chess } from 'chess.js'
 import { forwardRef, useState } from 'react'
 import Square from './Square';
 
-const Board = () => {
+const Board = ({ showBoard }: any) => {
   const [board, setBoard] = useState(new Chess());
   const [clickedPiece, setClickedPiece] = useState({ i: -1, square: '' });
   const [activeSquares, setActiveSquares] = useState([-1]);
@@ -95,7 +95,7 @@ const Board = () => {
   }
 
   return (
-    <>
+    <div className={`${showBoard ? '' : 'hidden'} flex-col text-center`}>
       <div id="board" className="grid grid-cols-8 bg-black w-[352px] h-[352px] md:w-[504px] md:h-[504px] mx-auto">
         {board.board().flat().map((piece, i) => (
           // Piece onClick will call a function with further logic to determine if it's the firist piece clicked
@@ -105,8 +105,8 @@ const Board = () => {
         ))}
       </div>
       {winner && <div className='mx-auto'>Game over {winner} has won</div>}
-      <button className='align-middle items-center text-center justify-center mx-auto' onClick={clearBoard}>Clear Board</button>
-    </>
+      <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard}>Reset Board</button>
+    </div>
   )
 }
 
