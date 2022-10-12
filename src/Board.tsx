@@ -12,7 +12,6 @@ const Board = ({ showBoard }: any) => {
   const [showModal, setShowModal] = useState(false);
 
   const makeMove = (from: string, to: string) => {
-    console.log(`Making move ${from} to ${to}`);
     const newBoard = new Chess(board.fen());
     const move = newBoard.move({ from: from, to: to });
     if (!move) {
@@ -27,11 +26,7 @@ const Board = ({ showBoard }: any) => {
 
     setBoard(newBoard);
 
-    // TODO: Now need some validation to check for finished game or stalemate
     if (newBoard.isGameOver()) {
-      console.log("game is over");
-      // Show game over modal
-      setShowModal(true);
       // Check which specific scenario it is
       if (newBoard.isCheckmate()) {
         whiteMove ? setResult('White') : setResult('Black');
@@ -39,6 +34,9 @@ const Board = ({ showBoard }: any) => {
       else if (newBoard.isStalemate()) {
         setResult('Stalemate');
       }
+
+      // Show game over modal
+      setShowModal(true);
     }
   }
 
@@ -52,6 +50,8 @@ const Board = ({ showBoard }: any) => {
   }
 
   const squareToIndex = (square: any): number => {
+    // If a taking move, remove the X
+    square = square.replace('x', '');
     // If not a pawn, moves have the piece character at the beginning
     if (square.length > 2) {
       square = square.substring(1);
@@ -79,11 +79,13 @@ const Board = ({ showBoard }: any) => {
     if (piece && pieceIsCurrentTurn(piece)) {
       setClickedPiece({ i: i, square: piece.square });
       const moves = board.moves({ square: piece.square });
+      console.log(moves);
       let selected = [];
       selected.push(i);
       moves.forEach(move => {
         selected.push(squareToIndex(move));
       });
+      console.log(selected);
       setActiveSquares(selected);
     }
     // This means we have already selected a piece, so try to make a move
