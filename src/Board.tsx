@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js'
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
+import Modal from './Modal';
 import Square from './Square';
 
 const Board = ({ showBoard }: any) => {
@@ -7,7 +8,8 @@ const Board = ({ showBoard }: any) => {
   const [clickedPiece, setClickedPiece] = useState({ i: -1, square: '' });
   const [activeSquares, setActiveSquares] = useState([-1]);
   const [whiteMove, setWhiteMove] = useState(true);
-  const [winner, setWinner] = useState('');
+  const [result, setResult] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const makeMove = (from: string, to: string) => {
     console.log(`Making move ${from} to ${to}`);
@@ -28,12 +30,14 @@ const Board = ({ showBoard }: any) => {
     // TODO: Now need some validation to check for finished game or stalemate
     if (newBoard.isGameOver()) {
       console.log("game is over");
+      // Show game over modal
+      setShowModal(true);
       // Check which specific scenario it is
       if (newBoard.isCheckmate()) {
-        whiteMove ? setWinner('white') : setWinner('black');
+        whiteMove ? setResult('White') : setResult('Black');
       }
       else if (newBoard.isStalemate()) {
-        console.log('You have a stalemate');
+        setResult('Stalemate');
       }
     }
   }
@@ -91,11 +95,13 @@ const Board = ({ showBoard }: any) => {
   const clearBoard = () => {
     setBoard(new Chess());
     setWhiteMove(true);
-    setWinner('');
+    setResult('');
   }
 
+  if (!showBoard) return null;
+
   return (
-    <div className={`${showBoard ? '' : 'hidden'} flex-col text-center`}>
+    <div className="flex-col text-center">
       <div id="board" className="grid grid-cols-8 bg-black w-[352px] h-[352px] md:w-[504px] md:h-[504px] mx-auto">
         {board.board().flat().map((piece, i) => (
           // Piece onClick will call a function with further logic to determine if it's the firist piece clicked
@@ -104,8 +110,9 @@ const Board = ({ showBoard }: any) => {
           <Square squareClicked={squareClicked} active={activeSquares.includes(i) ? true : false} key={i} i={i} piece={piece}></Square>
         ))}
       </div>
-      {winner && <div className='mx-auto'>Game over {winner} has won</div>}
       <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard}>Reset Board</button>
+
+      <Modal result={result} open={showModal} onClose={() => setShowModal(false)} />
     </div>
   )
 }
