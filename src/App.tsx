@@ -6,14 +6,10 @@ import Menu from './Menu';
 function App() {
   const [showBoard, setShowBoard] = useState(false);
 
-  const changeShowBoard = (show: boolean) => {
-    setShowBoard(show);
-  }
-
   return (
     <div className='mx-auto flex-col container h-screen bg-slate-600 pt-20'>
       <Board showBoard={showBoard} />
-      <Menu showBoard={showBoard} changeShowBoard={changeShowBoard} />
+      <Menu showBoard={showBoard} hideMenu={() => setShowBoard(true)} />
       {/* Want another modal type element that shows up on top of the board */}
     </div>
   )
