@@ -1,7 +1,13 @@
-# react-chess
+# React Chess
 
-To run code locally:
+Created with ReactJS, TypeScript, and Tailwind CSS
 
-npm i
+Deployed at [https://play-chess-online.netlify.app/](https://play-chess-online.netlify.app/)
 
-npm run dev
+# TODO
+
+[ ] Improve UI
+
+[ ] Add player names and taken pieces to the top/bottom or sides of the board
+
+[ ] Add types to all props
