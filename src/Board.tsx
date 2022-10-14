@@ -98,6 +98,13 @@ const Board = ({ showBoard }: any) => {
     setBoard(new Chess());
     setWhiteMove(true);
     setResult('');
+    setActiveSquares([-1]);
+    setClickedPiece({ i: -1, square: '' });
+  }
+
+  const closeModal = () => {
+    setShowModal(false);
+    clearBoard();
   }
 
   if (!showBoard) return null;
@@ -114,7 +121,7 @@ const Board = ({ showBoard }: any) => {
       </div>
       <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard}>Reset Board</button>
 
-      <Modal result={result} open={showModal} onClose={() => setShowModal(false)} />
+      <Modal result={result} open={showModal} onClose={closeModal} />
     </div>
   )
 }
