@@ -79,13 +79,11 @@ const Board = ({ showBoard }: any) => {
     if (piece && pieceIsCurrentTurn(piece)) {
       setClickedPiece({ i: i, square: piece.square });
       const moves = board.moves({ square: piece.square });
-      console.log(moves);
       let selected = [];
       selected.push(i);
       moves.forEach(move => {
         selected.push(squareToIndex(move));
       });
-      console.log(selected);
       setActiveSquares(selected);
     }
     // This means we have already selected a piece, so try to make a move
@@ -110,7 +108,7 @@ const Board = ({ showBoard }: any) => {
   if (!showBoard) return null;
 
   return (
-    <div className="flex-col text-center">
+    <div className="flex-col fixed text-center top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
       <div id="board" className="grid grid-cols-8 bg-black w-[352px] h-[352px] md:w-[504px] md:h-[504px] mx-auto">
         {board.board().flat().map((piece, i) => (
           // Piece onClick will call a function with further logic to determine if it's the firist piece clicked
