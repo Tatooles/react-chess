@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Modal from './Modal';
 import Square from './Square';
 
-const Board = ({ showBoard }: any) => {
+const Board = ({ showBoard, difficulty }: any) => {
   const [board, setBoard] = useState(new Chess());
   const [clickedPiece, setClickedPiece] = useState({ i: -1, square: '' });
   const [activeSquares, setActiveSquares] = useState([-1]);
@@ -105,8 +105,6 @@ const Board = ({ showBoard }: any) => {
     clearBoard();
   }
 
-  if (!showBoard) return null;
-
   return (
     <div className="flex-col fixed text-center top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
       <div id="board" className="grid grid-cols-8 bg-black w-[352px] h-[352px] md:w-[504px] md:h-[504px] mx-auto">
@@ -118,6 +116,9 @@ const Board = ({ showBoard }: any) => {
         ))}
       </div>
       <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard}>Reset Board</button>
+      {difficulty != -1 &&
+        <div>Playing vs AI</div>
+      }
 
       <Modal result={result} open={showModal} onClose={closeModal} />
     </div>
