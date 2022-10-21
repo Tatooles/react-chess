@@ -12,7 +12,7 @@ const Modal = ({ result, open, onClose }: any) => {
         <button onClick={onClose} className="bg-gray-500 p-4 rounded-md text-white font-bold mt-4">Close</button>
       </div>
     </>,
-    document.getElementById("portal")!
+    document.getElementById("modal")!
   )
 }
 
