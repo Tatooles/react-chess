@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 const Menu = ({ showMenu, setDifficulty, onHide }: any) => {
   const [showStart, setShowStart] = useState(true);
   const [showDifficulty, setShowDifficulty] = useState(false);
+  const [isWhite, setIsWhite] = useState(true);
 
   if (!showMenu) return null;
 
@@ -11,13 +12,13 @@ const Menu = ({ showMenu, setDifficulty, onHide }: any) => {
     // Changing this to a modal
     <>
       <div id="overlay" className="fixed top-0 left-0 bottom-0 right-0 z-10 bg-black bg-opacity-50"></div>
-      <div id="modal" className="fixed text-center top-32 sm:top-1/4 left-1/2 translate-x-[-50%]  p-5 z-10 bg-white rounded-lg w-4/5 sm:w-auto">
+      <div id="modal" className="fixed text-center top-32 sm:top-1/4 left-1/2 translate-x-[-50%] translate-y-[-10%]  p-5 z-10 bg-white rounded-lg w-4/5 sm:w-auto">
         {showStart &&
           <div id="start" className="flex flex-col items-center">
             <h1 className="text-3xl font-bold mb-10">Welcome to Chess Online!</h1>
             <button className="p-3 mb-5 block rounded-md bg-green-600 text-white font-bold text-lg w-1/2" onClick={onHide}>Play Local</button>
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Play Online</button>
-            <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Play vs AI</button>
+            <button className="p-3 mb-5 block rounded-md bg-green-600 text-white font-bold text-lg w-1/2" onClick={() => { setShowDifficulty(true); setShowStart(false) }}>Play vs AI</button>
           </div>
         }
         {showDifficulty &&
@@ -26,11 +27,23 @@ const Menu = ({ showMenu, setDifficulty, onHide }: any) => {
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Easy</button>
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Medium</button>
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Hard</button>
-            <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Impossible</button>
+            <button className="p-3 mb-7 block rounded-md bg-green-600 text-white font-bold text-lg w-1/2" onClick={() => { setDifficulty(100); onHide() }}>Impossible</button>
+
+            <h3 className="text-xl mb-2">Select Color</h3>
+
+            <div className="flex">
+              <div className="flex items-center mr-4">
+                <input checked={isWhite} onChange={() => setIsWhite(true)} id="radio-white" type="radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2" />
+                <label htmlFor="radio-white" className="ml-1 text-sm font-medium">White</label>
+              </div>
+              <div className="flex items-center">
+                <input checked={!isWhite} onChange={() => setIsWhite(false)} id="radio-white" type="radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"></input>
+                <label htmlFor="radio-white" className="ml-1 text-sm font-medium">Black</label>
+              </div>
+            </div>
+
           </div>
         }
-        {/* TODO: Another screen that allows the player to select which side they want */}
-
       </div>
     </>,
     document.getElementById("modal")!
