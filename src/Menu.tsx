@@ -17,7 +17,7 @@ const Menu = ({ showMenu, setDifficulty, onHide }: any) => {
             <h1 className="text-3xl font-bold mb-10">Welcome to Chess Online!</h1>
             <button className="p-3 mb-5 block rounded-md bg-green-600 text-white font-bold text-lg w-1/2" onClick={onHide}>Play Local</button>
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Play Online</button>
-            <button className="p-3 mb-5 block rounded-md bg-green-600 text-white font-bold text-lg w-1/2" onClick={() => { setShowStart(false); setShowDifficulty(true) }}>Play vs AI</button>
+            <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Play vs AI</button>
           </div>
         }
         {showDifficulty &&
@@ -26,9 +26,10 @@ const Menu = ({ showMenu, setDifficulty, onHide }: any) => {
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Easy</button>
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Medium</button>
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Hard</button>
-            <button className="p-3 mb-5 block rounded-md bg-green-600 text-white font-bold text-lg w-1/2" onClick={() => { onHide(); setDifficulty(1) }}>Impossible</button>
+            <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Impossible</button>
           </div>
         }
+        {/* TODO: Another screen that allows the player to select which side they want */}
 
       </div>
     </>,
