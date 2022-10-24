@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
-const Menu = ({ showMenu, setIsWhite, setDifficulty, onHide }: any) => {
+const Menu = ({ showMenu, setIsWhite, setDifficulty, setShowLocalBoard, setShowComputerBoard, onHide }: any) => {
   const [showStart, setShowStart] = useState(true);
   const [showDifficulty, setShowDifficulty] = useState(false);
   const [isWhiteLocal, setIsWhiteLocal] = useState(true);
@@ -27,7 +27,7 @@ const Menu = ({ showMenu, setIsWhite, setDifficulty, onHide }: any) => {
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Easy</button>
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Medium</button>
             <button className="p-3 mb-5 block rounded-md bg-gray-600 text-white font-bold text-lg w-1/2">Hard</button>
-            <button className="p-3 mb-7 block rounded-md bg-green-600 text-white font-bold text-lg w-1/2" onClick={() => { setDifficulty(100); onHide() }}>Impossible</button>
+            <button className="p-3 mb-7 block rounded-md bg-green-600 text-white font-bold text-lg w-1/2" onClick={() => { setDifficulty(100); onHide(); setShowComputerBoard(true); setShowLocalBoard(false); }}>Impossible</button>
 
             <h3 className="text-xl mb-2">Select Color</h3>
 

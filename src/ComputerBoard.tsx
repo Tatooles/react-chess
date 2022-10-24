@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Modal from './Modal';
 import Square from './Square';
 
-const Board = ({ difficulty, isWhite }: any) => {
+const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [board, setBoard] = useState(new Chess());
   const [clickedPiece, setClickedPiece] = useState({ i: -1, square: '' });
   const [activeSquares, setActiveSquares] = useState([-1]);
@@ -105,17 +105,22 @@ const Board = ({ difficulty, isWhite }: any) => {
     clearBoard();
   }
 
+  if (!showComputerBoard) return null;
+
   return (
-    <div className="flex-col fixed text-center top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
-      <div id="board" className="grid grid-cols-8 bg-black w-[352px] h-[352px] md:w-[504px] md:h-[504px] mx-auto">
-        {board.board().flat().map((piece, i) => (
-          <Square squareClicked={squareClicked} active={activeSquares.includes(i) ? true : false} key={i} i={i} piece={piece}></Square>
-        ))}
+    <div className="flex-col fixed text-center top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]" >
+      <div id="board" className="grid grid-cols-8 bg-black w-[352px] h-[352px] md:w-[504px] md:h-[504px] mx-auto" >
+        {
+          board.board().flat().map((piece, i) => (
+            <Square squareClicked={squareClicked} active={activeSquares.includes(i) ? true : false} key={i} i={i} piece={piece} ></Square>
+          ))
+        }
       </div>
-      <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard}>Reset Board</button>
+      <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard} >Reset Board</button>
+      <div>Difficulty: {difficulty}, color: {isWhite ? "White" : "Black"}</div>
       <Modal result={result} open={showModal} onClose={closeModal} />
     </div>
   )
 }
 
-export default Board
+export default ComputerBoard
