@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Modal from './Modal';
 import Square from './Square';
 
-const Board = ({ showBoard, difficulty }: any) => {
+const Board = ({ difficulty, isWhite }: any) => {
   const [board, setBoard] = useState(new Chess());
   const [clickedPiece, setClickedPiece] = useState({ i: -1, square: '' });
   const [activeSquares, setActiveSquares] = useState([-1]);

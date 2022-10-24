@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
-const Menu = ({ showMenu, setDifficulty, onHide }: any) => {
+const Menu = ({ showMenu, setIsWhite, setDifficulty, onHide }: any) => {
   const [showStart, setShowStart] = useState(true);
   const [showDifficulty, setShowDifficulty] = useState(false);
-  const [isWhite, setIsWhite] = useState(true);
+  const [isWhiteLocal, setIsWhiteLocal] = useState(true);
 
   if (!showMenu) return null;
 
@@ -33,12 +33,12 @@ const Menu = ({ showMenu, setDifficulty, onHide }: any) => {
 
             <div className="flex">
               <div className="flex items-center mr-4">
-                <input checked={isWhite} onChange={() => setIsWhite(true)} id="radio-white" type="radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2" />
-                <label htmlFor="radio-white" className="ml-1 text-sm font-medium">White</label>
+                <input checked={isWhiteLocal} onChange={() => { setIsWhite(true); setIsWhiteLocal(true) }} type="radio" className="w-4 h-4" />
+                <label className="ml-1 text-sm font-medium">White</label>
               </div>
               <div className="flex items-center">
-                <input checked={!isWhite} onChange={() => setIsWhite(false)} id="radio-white" type="radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"></input>
-                <label htmlFor="radio-white" className="ml-1 text-sm font-medium">Black</label>
+                <input checked={!isWhiteLocal} onChange={() => { setIsWhite(false); setIsWhiteLocal(false) }} type="radio" className="w-4 h-4"></input>
+                <label className="ml-1 text-sm font-medium">Black</label>
               </div>
             </div>
 
