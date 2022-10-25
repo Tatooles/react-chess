@@ -38,6 +38,27 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       // Show game over modal
       setShowModal(true);
     }
+
+    // Now it's the computer's turn
+    makeComputerMove();
+  }
+
+  const makeComputerMove = () => {
+    getComputerMove();
+  }
+
+  const getComputerMove = async () => {
+    fetch('http://localhost:8080/', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ position: board.fen() })
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
   }
 
   /**
@@ -76,7 +97,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
 
   const squareClicked = (i: number, piece?: any) => {
     // Select the current piece, and highlight it and all other possible moves
-    if (piece && pieceIsCurrentTurn(piece)) {
+    if (piece && pieceIsCurrentTurn(piece) && ((piece.color == 'w' && isWhite) || (piece.color == 'b' && !isWhite))) {
       setClickedPiece({ i: i, square: piece.square });
       const moves = board.moves({ square: piece.square });
       let selected = [];
