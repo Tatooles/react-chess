@@ -11,11 +11,13 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [result, setResult] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const makeMove = (from: string, to: string) => {
+  const executeMove = (from: string, to: string) => {
     const newBoard = new Chess(board.fen());
+    // FIXME: The issue is that the board is out of date (1 move behind) when the computer tries to make a move
     const move = newBoard.move({ from: from, to: to });
     if (!move) {
       console.log('invalid move');
+      return board;
     } else {
       // Successful move
       // Now deslect piece and change current turn
@@ -38,27 +40,34 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       // Show game over modal
       setShowModal(true);
     }
+    return newBoard;
+  }
+
+  const makeMove = (from: string, to: string) => {
+    const newBoard = executeMove(from, to);
 
     // Now it's the computer's turn
-    makeComputerMove();
+    makeComputerMove(newBoard);
   }
 
-  const makeComputerMove = () => {
-    getComputerMove();
+  const makeComputerMove = async (newBoard: any) => {
+    let move = await getComputerMove(newBoard);
+    console.log(`${move.slice(0, 2)} ${move.slice(2, 4)}`);
+    executeMove(move.slice(0, 2), move.slice(2, 4));
   }
 
-  const getComputerMove = async () => {
-    fetch('http://localhost:8080/', {
+  const getComputerMove = async (newBoard: any) => {
+    let response = await fetch('http://localhost:8080/', {
       method: 'POST',
       mode: 'cors',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ position: board.fen() })
+      body: JSON.stringify({ position: newBoard.fen() })
     })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    let data = await response.json();
+    return data.move;
   }
 
   /**
@@ -97,7 +106,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
 
   const squareClicked = (i: number, piece?: any) => {
     // Select the current piece, and highlight it and all other possible moves
-    if (piece && pieceIsCurrentTurn(piece) && ((piece.color == 'w' && isWhite) || (piece.color == 'b' && !isWhite))) {
+    if (piece && pieceIsCurrentTurn(piece)) {
       setClickedPiece({ i: i, square: piece.square });
       const moves = board.moves({ square: piece.square });
       let selected = [];
@@ -114,6 +123,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   }
 
   const clearBoard = () => {
+    console.log("clear board called for some reason..");
     setBoard(new Chess());
     setWhiteMove(true);
     setResult('');
