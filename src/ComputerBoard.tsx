@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from './Modal';
 import Square from './Square';
 
@@ -11,9 +11,24 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [result, setResult] = useState('');
   const [showModal, setShowModal] = useState(false);
 
+  useEffect(() => {
+    // Use the fen to determine who's turn it is
+    // If computer's call computer move function
+    // Need second space separated token for the current move
+    const turn = board.fen().split(' ')[1];
+
+    if (turn === 'w' && !isWhite || turn === 'b' && isWhite) {
+      makeComputerMove(board);
+    }
+
+    // CAUTION: Now runs forever
+  }, [board]);
+
+  // Probably need another useEffect
+  // If player is black computer makes first move
+
   const executeMove = (from: string, to: string) => {
     const newBoard = new Chess(board.fen());
-    // FIXME: The issue is that the board is out of date (1 move behind) when the computer tries to make a move
     const move = newBoard.move({ from: from, to: to });
     if (!move) {
       console.log('invalid move');
@@ -44,10 +59,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   }
 
   const makeMove = (from: string, to: string) => {
-    const newBoard = executeMove(from, to);
-
-    // Now it's the computer's turn
-    makeComputerMove(newBoard);
+    executeMove(from, to);
   }
 
   const makeComputerMove = async (newBoard: any) => {
@@ -98,7 +110,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
    * @returns true if it is this piece's turn, else false
    */
   const pieceIsCurrentTurn = (piece: any): boolean => {
-    if (piece.color == 'w' && whiteMove || piece.color == 'b' && !whiteMove) {
+    if (piece.color === 'w' && whiteMove || piece.color === 'b' && !whiteMove) {
       return true;
     }
     return false;
