@@ -12,17 +12,22 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
+    // If the board is updated and it's the computer's turn they need to move
     // Use the fen to determine who's turn it is
-    // If computer's call computer move function
-    // Need second space separated token for the current move
+    // If computer's turn, call computer move function
     const turn = board.fen().split(' ')[1];
 
     if (turn === 'w' && !isWhite || turn === 'b' && isWhite) {
       makeComputerMove(board);
     }
-
-    // CAUTION: Now runs forever
   }, [board]);
+
+  useEffect(() => {
+    // If difficulty has been set that means the game started, and if the computer is white they move first
+    if (difficulty != -1 && !isWhite) {
+      makeComputerMove(board);
+    }
+  }, [difficulty]);
 
   // Probably need another useEffect
   // If player is black computer makes first move
@@ -118,7 +123,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
 
   const squareClicked = (i: number, piece?: any) => {
     // Select the current piece, and highlight it and all other possible moves
-    if (piece && pieceIsCurrentTurn(piece)) {
+    if (piece && pieceIsCurrentTurn(piece) && ((piece.color == 'w' && isWhite) || (piece.color == 'b' && !isWhite))) {
       setClickedPiece({ i: i, square: piece.square });
       const moves = board.moves({ square: piece.square });
       let selected = [];
@@ -135,6 +140,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   }
 
   const clearBoard = () => {
+    // TODO: Have engine play after clear board when engine is white
     console.log("clear board called for some reason..");
     setBoard(new Chess());
     setWhiteMove(true);
