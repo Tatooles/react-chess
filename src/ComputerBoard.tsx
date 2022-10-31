@@ -13,7 +13,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
 
   useEffect(() => {
     // If the board is updated and it's the computer's turn they need to move
-    // Use the fen to determine who's turn it is
+    // Use the fen to determine whose turn it is
     // If computer's turn, call computer move function
     const turn = board.fen().split(' ')[1];
 
@@ -76,9 +76,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const getComputerMove = async (newBoard: any) => {
     let response = await fetch('http://localhost:8080/', {
       method: 'POST',
-      mode: 'cors',
       headers: {
-        'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ position: newBoard.fen() })
@@ -140,8 +138,6 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   }
 
   const clearBoard = () => {
-    // TODO: Have engine play after clear board when engine is white
-    console.log("clear board called for some reason..");
     setBoard(new Chess());
     setWhiteMove(true);
     setResult('');
