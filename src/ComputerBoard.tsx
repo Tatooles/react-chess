@@ -69,7 +69,6 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
 
   const makeComputerMove = async (newBoard: any) => {
     let move = await getComputerMove(newBoard);
-    console.log(`${move.slice(0, 2)} ${move.slice(2, 4)}`);
     executeMove(move.slice(0, 2), move.slice(2, 4));
   }
 
@@ -162,7 +161,6 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
         }
       </div>
       <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard} >Reset Board</button>
-      <div>Difficulty: {difficulty}, color: {isWhite ? "White" : "Black"}</div>
       <Modal result={result} open={showModal} onClose={closeModal} />
     </div>
   )
