@@ -82,17 +82,8 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ position: newBoard.fen() })
-    })
-      .catch((err) => {
-        console.log(err);
-        return new Response(JSON.stringify({
-          code: 500,
-          message: 'Stupid server Error'
-        }));
-      })
-    // if (await !response.ok) {
-    //   console.log("we have an error!");
-    // }
+    });
+
     let data = await response.json();
     return data.move;
   }
