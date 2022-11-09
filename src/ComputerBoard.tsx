@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Chess } from 'chess.js'
 import { useEffect, useState } from 'react'
 import Modal from './Modal';
@@ -76,16 +77,13 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   }
 
   const getComputerMove = async (newBoard: any) => {
-    let response = await fetch('https://5z499ageih.execute-api.us-east-2.amazonaws.com', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ position: newBoard.fen() })
-    });
+    let response = await axios.post('https://5z499ageih.execute-api.us-east-2.amazonaws.com', {
+      position: newBoard.fen()
+    })
 
-    let data = await response.json();
-    return data.move;
+    let data = await response;
+    // console.log(data);
+    return data.data.move;
   }
 
   /**
