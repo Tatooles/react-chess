@@ -69,9 +69,6 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
 
   const makeComputerMove = async (newBoard: any) => {
     let move = await getComputerMove(newBoard);
-    while (!move) {
-      move = await getComputerMove(newBoard);
-    }
     executeMove(move.slice(0, 2), move.slice(2, 4));
   }
 
