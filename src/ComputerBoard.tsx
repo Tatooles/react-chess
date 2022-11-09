@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Chess } from 'chess.js'
 import { useEffect, useState } from 'react'
 import Modal from './Modal';
@@ -70,17 +70,27 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
 
   const makeComputerMove = async (newBoard: any) => {
     let move = await getComputerMove(newBoard);
-    executeMove(move.slice(0, 2), move.slice(2, 4));
+    if (move) {
+      executeMove(move.slice(0, 2), move.slice(2, 4));
+    } else {
+      console.log("Ran into an error, sorry!");
+      // Need some other logic, maybe show a modal and have them reset the game?
+    }
   }
 
   const getComputerMove = async (newBoard: any) => {
-    let response = await axios.post('https://5z499ageih.execute-api.us-east-2.amazonaws.com', {
-      position: newBoard.fen()
-    })
+    try {
+      let response = await axios.post('https://5z499ageih.execute-api.us-east-2.amazonaws.com', {
+        position: newBoard.fen()
+      });
 
-    let data = await response;
-    // console.log(data);
-    return data.data.move;
+      let data = await response;
+      // console.log(data);
+      return data.data.move;
+    } catch (error) {
+      const err = error as AxiosError;
+      console.error(err.message);
+    }
   }
 
   /**
