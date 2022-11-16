@@ -73,7 +73,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   }
 
   const getComputerMove = async (newBoard: any) => {
-    let response = await fetch('https://5z499ageih.execute-api.us-east-2.amazonaws.com', {
+    let response = await fetch(' https://5r908wi8c7.execute-api.us-east-2.amazonaws.com', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
