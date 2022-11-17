@@ -6,6 +6,8 @@ Deployed at [https://play-chess-online.netlify.app/](https://play-chess-online.n
 
 # TODO
 
+[ ] Add spinner while server is responding
+
 [ ] Improve UI
 
 [ ] Add player names and taken pieces to the top/bottom or sides of the board
