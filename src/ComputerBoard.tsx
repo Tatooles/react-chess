@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { Chess } from 'chess.js'
 import { useEffect, useState } from 'react'
-import Modal from './Modal';
+import EndModal from './EndModal';
 import Square from './Square';
 
 const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
@@ -10,7 +10,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [activeSquares, setActiveSquares] = useState([-1]);
   const [whiteMove, setWhiteMove] = useState(true);
   const [result, setResult] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [showEndModal, setshowEndModal] = useState(false);
 
   useEffect(() => {
     // If the board is updated and it's the computer's turn they need to move
@@ -59,7 +59,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       }
 
       // Show game over modal
-      setShowModal(true);
+      setshowEndModal(true);
     }
     return newBoard;
   }
@@ -74,18 +74,17 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       executeMove(move.slice(0, 2), move.slice(2, 4));
     } else {
       console.log("Ran into an error, sorry!");
-      // Need some other logic, maybe show a modal and have them reset the game?
+      // Show modal here
     }
   }
 
   const getComputerMove = async (newBoard: any) => {
     try {
-      let response = await axios.post('https://5z499ageih.execute-api.us-east-2.amazonaws.com', {
+      let response = await axios.post('https://5r908wi8c7.execute-api.us-east-2.amazonaws.com', {
         position: newBoard.fen()
       });
 
       let data = await response;
-      // console.log(data);
       return data.data.move;
     } catch (error) {
       const err = error as AxiosError;
@@ -154,7 +153,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   }
 
   const closeModal = () => {
-    setShowModal(false);
+    setshowEndModal(false);
     clearBoard();
   }
 
@@ -170,7 +169,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
         }
       </div>
       <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard} >Reset Board</button>
-      <Modal result={result} open={showModal} onClose={closeModal} />
+      <EndModal result={result} open={showEndModal} onClose={closeModal} />
     </div>
   )
 }

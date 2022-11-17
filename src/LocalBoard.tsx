@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js'
 import { useState } from 'react'
-import Modal from './Modal';
+import Modal from './EndModal';
 import Square from './Square';
 
 const LocalBoard = ({ showLocalBoard }: any) => {
