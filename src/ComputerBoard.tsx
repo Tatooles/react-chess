@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { Chess } from 'chess.js'
 import { useEffect, useState } from 'react'
 import EndModal from './EndModal';
+import ErrorModal from './ErrorModal';
 import Square from './Square';
 
 const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
@@ -10,7 +11,10 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [activeSquares, setActiveSquares] = useState([-1]);
   const [whiteMove, setWhiteMove] = useState(true);
   const [result, setResult] = useState('');
+
   const [showEndModal, setshowEndModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     // If the board is updated and it's the computer's turn they need to move
@@ -74,6 +78,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       executeMove(move.slice(0, 2), move.slice(2, 4));
     } else {
       console.log("Ran into an error, sorry!");
+      setShowErrorModal(true);
       // Show modal here
     }
   }
@@ -89,6 +94,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
     } catch (error) {
       const err = error as AxiosError;
       console.error(err.message);
+      setErrorMessage(err.message);
     }
   }
 
@@ -152,9 +158,12 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
     setClickedPiece({ i: -1, square: '' });
   }
 
-  const closeModal = () => {
+  const closeModal = (clear: boolean) => {
     setshowEndModal(false);
-    clearBoard();
+    setShowErrorModal(false);
+    if (clear) {
+      clearBoard();
+    }
   }
 
   if (!showComputerBoard) return null;
@@ -169,7 +178,8 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
         }
       </div>
       <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard} >Reset Board</button>
-      <EndModal result={result} open={showEndModal} onClose={closeModal} />
+      <EndModal result={result} open={showEndModal} onClose={() => closeModal(true)} />
+      <ErrorModal message={errorMessage} open={showErrorModal} onClose={() => closeModal(true)} />
     </div>
   )
 }
