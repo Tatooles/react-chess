@@ -1,6 +1,8 @@
+import axios, { AxiosError } from 'axios';
 import { Chess } from 'chess.js'
 import { useEffect, useState } from 'react'
-import Modal from './Modal';
+import EndModal from './EndModal';
+import ErrorModal from './ErrorModal';
 import Square from './Square';
 
 const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
@@ -9,7 +11,10 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [activeSquares, setActiveSquares] = useState([-1]);
   const [whiteMove, setWhiteMove] = useState(true);
   const [result, setResult] = useState('');
-  const [showModal, setShowModal] = useState(false);
+
+  const [showEndModal, setShowEndModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     // If the board is updated and it's the computer's turn they need to move
@@ -18,14 +23,14 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
     const turn = board.fen().split(' ')[1];
 
     if (turn === 'w' && !isWhite || turn === 'b' && isWhite) {
-      makeComputerMove(board);
+      makeComputerMove();
     }
   }, [board]);
 
   useEffect(() => {
     // If difficulty has been set that means the game started, and if the computer is white they move first
     if (difficulty != -1 && !isWhite) {
-      makeComputerMove(board);
+      makeComputerMove();
     }
   }, [difficulty]);
 
@@ -58,7 +63,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       }
 
       // Show game over modal
-      setShowModal(true);
+      setShowEndModal(true);
     }
     return newBoard;
   }
@@ -67,22 +72,20 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
     executeMove(from, to);
   }
 
-  const makeComputerMove = async (newBoard: any) => {
-    let move = await getComputerMove(newBoard);
-    executeMove(move.slice(0, 2), move.slice(2, 4));
-  }
+  const makeComputerMove = async () => {
+    try {
+      let response = await axios.post('https://5r908wi8c7.execute-api.us-east-2.amazonaws.com', {
+        position: board.fen()
+      });
 
-  const getComputerMove = async (newBoard: any) => {
-    let response = await fetch(' https://5r908wi8c7.execute-api.us-east-2.amazonaws.com', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ position: newBoard.fen() })
-    });
-
-    let data = await response.json();
-    return data.move;
+      let data = await response;
+      let move = data.data.move;
+      executeMove(move.slice(0, 2), move.slice(2, 4));
+    } catch (error) {
+      const err = error as AxiosError;
+      setErrorMessage(err.message);
+      setShowErrorModal(true);
+    }
   }
 
   /**
@@ -145,9 +148,12 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
     setClickedPiece({ i: -1, square: '' });
   }
 
-  const closeModal = () => {
-    setShowModal(false);
-    clearBoard();
+  const closeModal = (clear: boolean) => {
+    setShowEndModal(false);
+    setShowErrorModal(false);
+    if (clear) {
+      clearBoard();
+    }
   }
 
   if (!showComputerBoard) return null;
@@ -162,7 +168,8 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
         }
       </div>
       <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard} >Reset Board</button>
-      <Modal result={result} open={showModal} onClose={closeModal} />
+      <EndModal result={result} open={showEndModal} onClose={() => closeModal(true)} />
+      <ErrorModal message={errorMessage} open={showErrorModal} onClose={() => closeModal(true)} retry={() => { makeComputerMove(); closeModal(false) }} />
     </div>
   )
 }
