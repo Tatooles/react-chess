@@ -12,7 +12,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [whiteMove, setWhiteMove] = useState(true);
   const [result, setResult] = useState('');
 
-  const [showEndModal, setshowEndModal] = useState(false);
+  const [showEndModal, setShowEndModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -63,7 +63,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       }
 
       // Show game over modal
-      setshowEndModal(true);
+      setShowEndModal(true);
     }
     return newBoard;
   }
@@ -149,7 +149,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   }
 
   const closeModal = (clear: boolean) => {
-    setshowEndModal(false);
+    setShowEndModal(false);
     setShowErrorModal(false);
     if (clear) {
       clearBoard();
