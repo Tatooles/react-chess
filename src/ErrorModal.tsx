@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 
-const Modal = ({ message, open, onClose }: any) => {
+const Modal = ({ message, open, onClose, retry }: any) => {
   if (!open) return null;
 
   return createPortal(
@@ -10,7 +10,7 @@ const Modal = ({ message, open, onClose }: any) => {
         <h1 className="text-3xl font-bold mb-4">Error</h1>
         <p>{message}</p>
         <div className="flex flex-col">
-          <button onClick={onClose} className="bg-gray-500 p-4 rounded-md text-white font-bold mt-4">Retry Move</button>
+          <button onClick={retry} className="bg-green-500 p-4 rounded-md text-white font-bold mt-4">Retry Move</button>
           <button onClick={onClose} className="bg-green-600 p-4 rounded-md text-white font-bold mt-4">Restart Game</button>
         </div>
       </div>
