@@ -73,28 +73,18 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   }
 
   const makeComputerMove = async () => {
-    let move = await getComputerMove();
-    if (move) {
-      executeMove(move.slice(0, 2), move.slice(2, 4));
-    } else {
-      console.log("Ran into an error, sorry!");
-      setShowErrorModal(true);
-      // Show modal here
-    }
-  }
-
-  const getComputerMove = async () => {
     try {
       let response = await axios.post('https://5r908wi8c7.execute-api.us-east-2.amazonaws.com', {
         position: board.fen()
       });
 
       let data = await response;
-      return data.data.move;
+      let move = data.data.move;
+      executeMove(move.slice(0, 2), move.slice(2, 4));
     } catch (error) {
       const err = error as AxiosError;
-      console.error(err.message);
       setErrorMessage(err.message);
+      setShowErrorModal(true);
     }
   }
 
