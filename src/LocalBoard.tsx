@@ -7,6 +7,7 @@ const LocalBoard = ({ showLocalBoard }: any) => {
   const [board, setBoard] = useState(new Chess());
   const [clickedPiece, setClickedPiece] = useState({ i: -1, square: '' });
   const [activeSquares, setActiveSquares] = useState([-1]);
+  const [previousMove, setPreviousMove] = useState([-1]);
   const [whiteMove, setWhiteMove] = useState(true);
   const [result, setResult] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -22,6 +23,9 @@ const LocalBoard = ({ showLocalBoard }: any) => {
       setActiveSquares([-1]);
       setClickedPiece({ i: -1, square: '' });
       setWhiteMove(!whiteMove);
+
+      // Also highlight previous move
+      setPreviousMove([squareToIndex(from), squareToIndex(to)]);
     }
 
     setBoard(newBoard);
@@ -111,7 +115,7 @@ const LocalBoard = ({ showLocalBoard }: any) => {
     <div className="flex-col fixed text-center top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
       <div id="board" className="grid grid-cols-8 bg-black w-[352px] h-[352px] md:w-[504px] md:h-[504px] mx-auto">
         {board.board().flat().map((piece, i) => (
-          <Square squareClicked={squareClicked} active={activeSquares.includes(i) ? true : false} key={i} i={i} piece={piece}></Square>
+          <Square squareClicked={squareClicked} active={activeSquares.includes(i) ? true : false} previous={previousMove.includes(i) ? true : false} key={i} i={i} piece={piece}></Square>
         ))}
       </div>
       <button className='mt-10 border-2 p-5 rounded-lg bg-white' onClick={clearBoard}>Reset Board</button>
