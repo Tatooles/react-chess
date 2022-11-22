@@ -145,6 +145,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
     setWhiteMove(true);
     setResult('');
     setActiveSquares([-1]);
+    setPreviousMove([-1]);
     setClickedPiece({ i: -1, square: '' });
   }
 
