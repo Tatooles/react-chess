@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import EndModal from './EndModal';
 import ErrorModal from './ErrorModal';
 import Square from './Square';
+import { BeatLoader } from 'react-spinners';
 
 const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [board, setBoard] = useState(new Chess());
@@ -11,6 +12,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [activeSquares, setActiveSquares] = useState([-1]);
   const [whiteMove, setWhiteMove] = useState(true);
   const [result, setResult] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [showEndModal, setShowEndModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -73,6 +75,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   }
 
   const makeComputerMove = async () => {
+    setLoading(true);
     try {
       let response = await axios.post('https://5r908wi8c7.execute-api.us-east-2.amazonaws.com', {
         position: board.fen()
@@ -86,6 +89,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       setErrorMessage(err.message);
       setShowErrorModal(true);
     }
+    setLoading(false);
   }
 
   /**
@@ -160,6 +164,10 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
 
   return (
     <div className="flex-col fixed text-center top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]" >
+      <BeatLoader
+        className='fixed left-1/2 translate-x-[-50%] top-[-50px]'
+        loading={loading}
+      />
       <div id="board" className="grid grid-cols-8 bg-black w-[352px] h-[352px] md:w-[504px] md:h-[504px] mx-auto" >
         {
           board.board().flat().map((piece, i) => (
