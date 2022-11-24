@@ -10,6 +10,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [board, setBoard] = useState(new Chess());
   const [clickedPiece, setClickedPiece] = useState({ i: -1, square: '' });
   const [activeSquares, setActiveSquares] = useState([-1]);
+  const [previousMove, setPreviousMove] = useState([-1]);
   const [whiteMove, setWhiteMove] = useState(true);
   const [result, setResult] = useState('');
   const [loading, setLoading] = useState(false);
@@ -43,7 +44,6 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
     const newBoard = new Chess(board.fen());
     const move = newBoard.move({ from: from, to: to });
     if (!move) {
-      console.log('invalid move');
       return board;
     } else {
       // Successful move
@@ -51,6 +51,9 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       setActiveSquares([-1]);
       setClickedPiece({ i: -1, square: '' });
       setWhiteMove(!whiteMove);
+
+      // Also highlight previous move
+      setPreviousMove([squareToIndex(from), squareToIndex(to)]);
     }
 
     setBoard(newBoard);
@@ -68,10 +71,6 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       setShowEndModal(true);
     }
     return newBoard;
-  }
-
-  const makeMove = (from: string, to: string) => {
-    executeMove(from, to);
   }
 
   const makeComputerMove = async () => {
@@ -140,7 +139,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
     }
     // This means we have already selected a piece, so try to make a move
     if (clickedPiece.i != -1) {
-      makeMove(clickedPiece.square, indexToSquare(i));
+      executeMove(clickedPiece.square, indexToSquare(i));
     }
   }
 
@@ -149,6 +148,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
     setWhiteMove(true);
     setResult('');
     setActiveSquares([-1]);
+    setPreviousMove([-1]);
     setClickedPiece({ i: -1, square: '' });
   }
 
@@ -171,7 +171,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       <div id="board" className="grid grid-cols-8 bg-black w-[352px] h-[352px] md:w-[504px] md:h-[504px] mx-auto" >
         {
           board.board().flat().map((piece, i) => (
-            <Square squareClicked={squareClicked} active={activeSquares.includes(i) ? true : false} key={i} i={i} piece={piece} ></Square>
+            <Square squareClicked={squareClicked} active={activeSquares.includes(i) ? true : false} previous={previousMove.includes(i) ? true : false} key={i} i={i} piece={piece} ></Square>
           ))
         }
       </div>
