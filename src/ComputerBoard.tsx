@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import EndModal from './EndModal';
 import ErrorModal from './ErrorModal';
 import Square from './Square';
-import { BeatLoader } from 'react-spinners';
+import { PulseLoader } from 'react-spinners';
 
 const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
   const [board, setBoard] = useState(new Chess());
@@ -150,6 +150,7 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
     setActiveSquares([-1]);
     setPreviousMove([-1]);
     setClickedPiece({ i: -1, square: '' });
+    setLoading(false);
   }
 
   const closeModal = (clear: boolean) => {
@@ -164,8 +165,9 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
 
   return (
     <div className="flex-col fixed text-center top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]" >
-      <BeatLoader
+      <PulseLoader
         className='fixed left-1/2 translate-x-[-50%] top-[-50px]'
+        color='gray'
         loading={loading}
       />
       <div id="board" className="grid grid-cols-8 bg-black w-[352px] h-[352px] md:w-[504px] md:h-[504px] mx-auto" >
