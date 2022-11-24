@@ -131,7 +131,6 @@ const ComputerBoard = ({ showComputerBoard, difficulty, isWhite }: any) => {
       moves.forEach(move => {
         selected.push(squareToIndex(move));
       });
-      console.log(selected);
       setActiveSquares(selected);
     }
     // This means we have already selected a piece, so try to make a move
